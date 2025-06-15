@@ -29,3 +29,43 @@ Supports auto-completion via Tab using Readline's rl_complete.
 
 📦 App Launching
 Cross-platform support to launch applications (e.g., notepad.exe, calc).
+
+
+///📂 Installation & Setup
+
+(Warning- must have wsl install if run on windows).
+
+1. Clone repo-
+git clone https://github.com/kkrodith/custom_shell.git
+cd custom_shell
+
+2. Install Dependencies-
+///  Ubuntu/Debian:
+sudo apt update
+sudo apt install g++ libreadline-dev
+
+/// Arch Linux:
+sudo pacman -S g++ readline base-devel
+
+/// Windows (MSYS2):
+pacman -Syu
+pacman -S mingw-w64-ucrt-x86_64-readline
+
+3. Build and Run
+g++ shell.cpp -lreadline -o myshell
+./myshell
+
+
+
+// /📁 Project Structure
+bash
+Copy
+Edit
+custom-shell/
+│
+├── shell.cpp              # Main entry and shell logic
+├── parser.hpp/.cpp        # Tokenizer and parser functions
+├── executor.hpp/.cpp      # Command execution, I/O, jobs
+├── history.hpp/.cpp       # Command history management
+├── typo.hpp/.cpp          # Typo suggestion logic
+├── README.md
