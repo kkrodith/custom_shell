@@ -1,71 +1,291 @@
-# custom_shell
+# 🚀 Unified Shell - Cross-Platform Command Execution Environment
 
-🚀 Features
-✅ Command Execution
-Execute external programs using fork(), execvp(), and waitpid() just like a standard shell.
+A unified shell system that executes both Windows and Linux commands seamlessly, regardless of your operating system. Perfect for developers, system administrators, and anyone working in mixed environments.
 
-📂 Built-in Commands
-Supports internal commands like:
+## ✨ Key Features
 
-cd <dir> – change directory
+### 🌐 Cross-Platform Command Support
+- **Windows Commands**: Execute `dir`, `copy`, `del`, PowerShell commands
+- **Linux Commands**: Execute `ls`, `cp`, `rm`, and all standard Unix tools
+- **Auto-Detection**: Automatically detects command type and routes to appropriate executor
+- **Mode Switching**: Manual mode selection (Windows/Linux/Auto-detect)
 
-export VAR=value – set environment variables
+### 🔧 Advanced Shell Features
+- **Command History**: Persistent command history across sessions
+- **Tab Completion**: Smart auto-completion using GNU Readline
+- **Background Jobs**: Execute commands with `&` for background processing
+- **Redirection**: Support for `>`, `>>`, `<` operators
+- **Pipelines**: Full pipeline support with `|` operator
+- **Built-in Commands**: `cd`, `export`, `history`, `help`, and more
 
-exit / $Q – exit the shell
+### 🎯 Smart Command Execution
+- **OS Detection**: Automatically detects Windows, Linux, WSL, or macOS
+- **WSL Integration**: Seamless Linux command execution on Windows via WSL
+- **Command Validation**: Validates commands before execution with helpful suggestions
+- **Error Handling**: Graceful error handling with meaningful error messages
 
-help – list available commands
+### 🛠️ Developer-Friendly
+- **Real-time Sessions**: Support for tmux/screen integration
+- **Session Management**: Persistent shell sessions with logging
+- **Configuration**: Customizable settings and preferences
+- **Debug Mode**: Comprehensive debugging and logging support
 
-🧠 Smart Typo Suggestions
-Suggests correct commands when user makes a typo (e.g., sl → ls, pod → pwd).
+## 📋 System Requirements
 
-🔁 Command History (Persistent)
-Remembers commands across sessions using GNU Readline. Navigate with ↑ / ↓ arrows.
+### Minimum Requirements
+- **OS**: Windows 10/11, Linux (Ubuntu 18.04+), macOS 10.15+
+- **RAM**: 512 MB
+- **Storage**: 50 MB free space
+- **Compiler**: C++17 compatible (GCC 7+, Clang 5+, MSVC 2017+)
 
-⚙️ Background Job Control
-Execute commands in the background using & (e.g., sleep 5 &). Prepares for jobs, fg, bg.
+### Dependencies
+- **GNU Readline** (for command-line editing)
+- **Build Tools**: make or CMake
+- **WSL 2** (Windows only, for Linux command execution)
 
-🧠 Tab Completion
-Supports auto-completion via Tab using Readline's rl_complete.
+## 🚀 Quick Start
 
-📦 App Launching
-Cross-platform support to launch applications (e.g., notepad.exe, calc).
+### Option 1: Automated Build (Recommended)
 
+```bash
+# Linux/macOS/WSL
+./scripts/build.sh
 
-///📂 Installation & Setup
+# Windows
+scripts\build.bat
 
-(Warning- must have wsl install if run on windows).
+# With options
+./scripts/build.sh --debug --cmake --install
+```
 
-1. Clone repo-
-git clone https://github.com/kkrodith/custom_shell.git
-cd custom_shell
+### Option 2: Manual Build
 
-2. Install Dependencies-
-///  Ubuntu/Debian:
-sudo apt update
-sudo apt install g++ libreadline-dev
+```bash
+# Install dependencies (Ubuntu/Debian)
+sudo apt-get install build-essential libreadline-dev
 
-/// Arch Linux:
-sudo pacman -S g++ readline base-devel
+# Build
+make
+# or
+cmake -B build && cmake --build build
 
-/// Windows (MSYS2):
-pacman -Syu
+# Run
+./unified_shell
+```
+
+### Option 3: Session Management
+
+```bash
+# Start a named session
+./scripts/launcher.sh start myproject
+
+# Attach to session
+./scripts/launcher.sh attach myproject
+
+# List sessions
+./scripts/launcher.sh list
+
+# Deploy system-wide
+./scripts/launcher.sh deploy
+```
+
+## 🎮 Usage Examples
+
+### Basic Command Execution
+
+```bash
+# Auto-detect mode (default)
+[AUTO]> ls -la          # Executes as Linux command
+[AUTO]> dir /w          # Executes as Windows command
+
+# Manual mode switching
+[AUTO]> mode windows
+[WIN]> dir
+[WIN]> mode linux
+[LNX]> ls -la
+```
+
+### Advanced Features
+
+```bash
+# Background execution
+[AUTO]> ping google.com &
+
+# Pipelines
+[AUTO]> ls -la | grep ".cpp"
+
+# Redirection
+[AUTO]> ls > files.txt
+[AUTO]> cat < input.txt > output.txt
+
+# Command history
+[AUTO]> history
+[AUTO]> !5              # Execute command #5 from history
+```
+
+### Built-in Commands
+
+```bash
+[AUTO]> help            # Show available commands
+[AUTO]> status          # Show system status
+[AUTO]> config          # Configure shell settings
+[AUTO]> clear           # Clear screen
+[AUTO]> exit            # Exit shell
+```
+
+## 📁 Project Structure
+
+```
+unified_shell/
+├── main.cpp                    # Application entry point
+├── unified_shell.hpp           # Core shell interface
+├── unified_shell.cpp           # Shell implementation
+├── shell.cpp                   # Original shell (legacy)
+├── Makefile                    # Build configuration
+├── CMakeLists.txt             # CMake configuration
+├── scripts/
+│   ├── build.sh               # Cross-platform build script
+│   ├── build.bat              # Windows build script
+│   └── launcher.sh            # Session management script
+├── DEPLOYMENT.md              # Detailed deployment guide
+└── README.md                  # This file
+```
+
+## 🔧 Configuration
+
+### First Run Setup
+1. Launch: `./unified_shell`
+2. Choose command mode (Windows/Linux/Auto-detect)
+3. Settings are saved automatically
+
+### Configuration File
+- **Linux/macOS**: `~/.unified_shell_config`
+- **Windows**: `%USERPROFILE%\.unified_shell_config`
+
+```ini
+# Example configuration
+default_mode=auto_detect
+auto_detect=true
+save_preferences=true
+```
+
+## 🌍 Platform Support
+
+| Platform | Windows Commands | Linux Commands | WSL Integration | Notes |
+|----------|------------------|----------------|-----------------|-------|
+| **Windows 10/11** | ✅ Native | ✅ via WSL | ✅ Automatic | Requires WSL for Linux commands |
+| **Linux** | ✅ via Wine/cmd.exe | ✅ Native | ➖ N/A | Limited Windows command support |
+| **macOS** | ⚠️ Limited | ✅ Native | ➖ N/A | Basic Windows command support |
+| **WSL** | ✅ Native | ✅ Native | ✅ Built-in | Best of both worlds |
+
+## 📖 Advanced Usage
+
+### Real-time Terminal Sessions
+
+```bash
+# Using tmux
+tmux new-session 'unified_shell'
+
+# Using screen
+screen -S shell_session unified_shell
+
+# Using our launcher
+./scripts/launcher.sh start development
+./scripts/launcher.sh attach development
+```
+
+### Integration with IDEs
+
+#### Visual Studio Code
+```json
+{
+    "terminal.integrated.profiles.linux": {
+        "Unified Shell": {
+            "path": "/usr/local/bin/unified_shell"
+        }
+    }
+}
+```
+
+#### JetBrains IDEs
+Set shell path in Settings → Tools → Terminal
+
+### Container Deployment
+
+```dockerfile
+FROM ubuntu:22.04
+RUN apt-get update && apt-get install -y build-essential libreadline-dev
+COPY . /app
+WORKDIR /app
+RUN make && make install
+ENTRYPOINT ["unified_shell"]
+```
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+**Build Errors**
+```bash
+./scripts/build.sh --check-deps  # Check dependencies
+./scripts/build.sh --clean --verbose  # Clean rebuild
+```
+
+**Readline Issues**
+```bash
+# Ubuntu/Debian
+sudo apt-get install libreadline-dev
+
+# macOS
+brew install readline
+
+# Windows/MSYS2
 pacman -S mingw-w64-ucrt-x86_64-readline
+```
 
-3. Build and Run
-g++ shell.cpp -lreadline -o myshell
-./myshell
+**WSL Integration**
+```powershell
+wsl --install     # Install WSL if missing
+wsl --update      # Update WSL
+```
 
+### Debug Mode
+```bash
+unified_shell --debug  # Enable debug output
+[AUTO]> status         # Check system status
+```
 
+## 🤝 Contributing
 
-// /📁 Project Structure
-bash
-Copy
-Edit
-custom-shell/
-│
-├── shell.cpp              # Main entry and shell logic
-├── parser.hpp/.cpp        # Tokenizer and parser functions
-├── executor.hpp/.cpp      # Command execution, I/O, jobs
-├── history.hpp/.cpp       # Command history management
-├── typo.hpp/.cpp          # Typo suggestion logic
-├── README.md
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature-name`
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
+
+### Development Setup
+```bash
+./scripts/build.sh --setup-dev  # Install dependencies
+./scripts/build.sh --debug      # Build debug version
+make test                       # Run tests
+```
+
+## 📄 License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- **GNU Readline** for command-line editing capabilities
+- **WSL Team** for seamless Windows-Linux integration
+- **Open Source Community** for inspiration and feedback
+
+## 🔗 Links
+
+- **Documentation**: [DEPLOYMENT.md](DEPLOYMENT.md)
+- **Issues**: [GitHub Issues](https://github.com/your-repo/unified_shell/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/your-repo/unified_shell/discussions)
+
+---
+
+Made with ❤️ for cross-platform development
